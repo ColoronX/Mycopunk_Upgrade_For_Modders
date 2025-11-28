@@ -1,5 +1,4 @@
 <!DOCTYPE html><html lang="en" data-theme="dark"><head>
-<!-- Google tag (gtag.js) -->
 <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-NTX1YS21Y0"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -12,7 +11,6 @@
 <title>Mycopunk Upgrade Solver & Generator</title>
 <style>
   :root { 
-    /* Light Theme */
     --bg-body: #fafafa;
     --bg-panel: #ffffff;
     --bg-input: #ffffff;
@@ -29,11 +27,9 @@
     
     --stroke: #7a4a2e;
     
-    /* Hex Colors */
     --hex-empty: #ffffff;
     --hex-fill: #333333;
     
-    /* UI Specifics */
     --overlay-bg: rgba(255,255,255,0.7);
     --kbd-bg: #f1f5f9;
     --badge-bg: #f7f7f8;
@@ -42,7 +38,6 @@
   }
 
   [data-theme="dark"] {
-    /* Dark Theme */
     --bg-body: #121212;
     --bg-panel: #1e1e1e;
     --bg-input: #2c2c2c;
@@ -59,11 +54,9 @@
     
     --stroke: #a67c52;
     
-    /* Hex Colors */
     --hex-empty: #2a2a2a;
     --hex-fill: #e9bb38;
     
-    /* UI Specifics */
     --overlay-bg: rgba(0,0,0,0.7);
     --kbd-bg: #333333;
     --badge-bg: #333333;
@@ -87,8 +80,7 @@
   button:hover { border-color: var(--border-hover); background: var(--bg-hover); }
   
   main { display: grid; grid-template-columns: 1fr var(--panel-w); min-height: 0; }
-  
-  /* Make the canvas column independently scrollable */
+ 
   #boardWrap {
     position: relative;
     display: grid;
@@ -119,7 +111,6 @@
   }
   #shapeList { overflow: auto; padding: 10px; display: grid; gap: 10px; min-height: 0; }
 
-  /* Card layout */
   .shapeItem {
     display: grid;
     grid-template-rows: auto auto auto; 
@@ -162,16 +153,13 @@
   
   .btn-code { background: rgba(46, 139, 87, 0.1); border-color: #2e8b57; color: #2e8b57; }
   .btn-code:hover { background: rgba(46, 139, 87, 0.2); }
-  /* Dark mode specific override for code button text to ensure visibility */
   [data-theme="dark"] .btn-code { color: #4ade80; border-color: #4ade80; }
 
-  /* Bottom-row adjacency inputs */
   .adjRow { display:flex; align-items:center; gap:6px; width: 100%; }
   .adjRow .check { margin-right: auto; }
   .adjRow input[type="number"] { width: 64px; padding:6px 8px; border:1px solid var(--border-input); border-radius:8px; background: var(--bg-input); color: var(--fg-primary); }
   .indexBadge { font-weight:600; }
 
-  /* Code Modal */
   #codeModal {
     position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 999;
     display: none; align-items: center; justify-content: center;
@@ -237,7 +225,6 @@
     </aside>
   </main>
 
-  <!-- Code Modal -->
   <div id="codeModal">
     <div id="codeContent">
       <div class="modalHeader">
@@ -256,9 +243,6 @@
   </div>
 
 <script>
-/* ================================
- *  Palette (40 colors)
- * ================================ */
 const COLORS = [
   "#e6194b","#3cb44b","#0082c8","#f58231","#911eb4","#46f0f0",
   "#f032e6","#d2f53c","#fabebe","#008080","#e6beff","#aa6e28",
@@ -1402,3 +1386,4 @@ refreshCodeModal() {
 const app = new App();
 </script>
 </body></html>
+
