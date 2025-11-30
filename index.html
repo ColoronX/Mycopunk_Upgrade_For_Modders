@@ -345,47 +345,47 @@ function normalizeForExport(cells) {
 }
 
 function generateCSharp(cells, autoConnect) {
-    const normCells = normalizeForExport(cells);
-    const cellSet = new Set(normCells.map(c => toKey(c[0], c[1])));
+    const norm = normalizeForExport(cells);
+    const map = new Map();
+    norm.forEach(([x,y]) => map.set(`${x},${y}`, { x, y, degree: 0 }));
+
+    map.forEach(info => {
+        const isEven = (info.x % 2 === 0);
+        getNeighborOffsets(isEven).forEach(o => {
+            if (map.has(`${info.x + o.dx},${info.y + o.dy}`)) info.degree++;
+        });
+    });
+
+    const hasPriority = (a, b) => {
+        if (a.degree !== b.degree) return a.degree > b.degree;
+        if (a.y !== b.y) return a.y < b.y;
+        return a.x < b.x;
+    };
 
     let w = 0, h = 0;
-    normCells.forEach(([x,y]) => {
-        if(x > w) w = x;
-        if(y > h) h = y;
-    });
-    w += 1; h += 1;
-    if (w < 3) w = 3;
-    if (h < 3) h = 3;
+    norm.forEach(([x,y]) => { w = Math.max(w, x); h = Math.max(h, y); });
+    w = Math.max(3, w + 1); h = Math.max(3, h + 1);
+    
+    norm.sort((a,b) => a[0] - b[0] || a[1] - b[1]);
 
-    let sb = "";
-    sb += `protected override HexMap Pattern \n`;
-    sb += `{\n    get\n    {\n`;
-    sb += `        // Generated Grid: ${w}x${h}\n`;
-    sb += `        HexMap m = new HexMap(${w}, ${h});\n\n`;
-
-    normCells.forEach(([x,y]) => {
-        sb += `        m[${x}, ${y}].enabled = true;\n`;
-        
+    let sb = `protected override HexMap Pattern\n{\n\tget\n\t{\n\t\tHexMap m = new HexMap(${w}, ${h});\n`;
+    norm.forEach(([x,y]) => {
+        sb += `\t\tm[${x}, ${y}].enabled = true;`;
         if (autoConnect) {
+            const me = map.get(`${x},${y}`);
             const isEven = (x % 2 === 0);
-            const offsets = getNeighborOffsets(isEven);
-            let connectionFlags = [];
-
-            offsets.forEach(off => {
-                const nx = x + off.dx;
-                const ny = y + off.dy;
-                if (cellSet.has(toKey(nx, ny))) {
-                    connectionFlags.push(`HexMap.Direction.${off.name}`);
+            const flags = [];
+            getNeighborOffsets(isEven).forEach(o => {
+                const nKey = `${x + o.dx},${y + o.dy}`;
+                if (map.has(nKey) && hasPriority(me, map.get(nKey))) {
+                    flags.push(`HexMap.Direction.${o.name}`);
                 }
             });
-
-            if (connectionFlags.length > 0) {
-                sb += `        m[${x}, ${y}].connections = ${connectionFlags.join(" | ")};\n`;
-            }
+            if (flags.length) sb += ` m[${x}, ${y}].connections = ${flags.join(" | ")};`;
         }
+        sb += `\n`;
     });
-
-    sb += `\n        return m;\n    }\n}`;
+    sb += `\t\treturn m;\n\t}\n}`;
     return sb;
 }
 /* ================================
@@ -1386,4 +1386,5 @@ refreshCodeModal() {
 const app = new App();
 </script>
 </body></html>
+
 
